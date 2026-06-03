@@ -1,0 +1,354 @@
+{
+  "name": "avvia_generazione",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "ragione_sociale"
+            },
+            {
+              "name": "partita_iva"
+            },
+            {
+              "name": "codice_ateco"
+            },
+            {
+              "name": "descrizione_attivita"
+            },
+            {
+              "name": "num_dipendenti"
+            },
+            {
+              "name": "mansioni"
+            },
+            {
+              "name": "indirizzo_sede"
+            },
+            {
+              "name": "tipo_documento"
+            },
+            {
+              "name": "categoria_rischio"
+            },
+            {
+              "name": "pericoli_settore"
+            },
+            {
+              "name": "rischi_per_mansione"
+            },
+            {
+              "name": "normativa_riferimento"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        -80
+      ],
+      "id": "6a5b5378-9455-4ad0-83c9-dcfd5c0a27d5",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2GOhTrhaE032us",
+          "mode": "list",
+          "cachedResultName": "Progetti DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl2GOhTrhaE032us"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Ragione Sociale": "={{ $json.ragione_sociale }}",
+            "Partita IVA": "={{ $json.partita_iva }}",
+            "Codice ATECO": "={{ $json.codice_ateco }}",
+            "Descrizione Attività": "={{ $json.descrizione_attivita }}",
+            "N° Dipendenti": "={{ $json.num_dipendenti }}",
+            "Mansioni": "={{ $json.mansioni }}",
+            "Indirizzo Sede": "={{ $json.indirizzo_sede }}",
+            "Tipo Documento": "={{ $json.tipo_documento }}",
+            "Categoria Rischio": "={{ $json.categoria_rischio }}",
+            "Pericoli Settore": "={{ $json.pericoli_settore }}",
+            "Rischi per Mansione": "={{ $json.rischi_per_mansione }}",
+            "Normativa Riferimento": "={{ $json.normativa_riferimento }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Ragione Sociale",
+              "displayName": "Ragione Sociale",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Partita IVA",
+              "displayName": "Partita IVA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Codice ATECO",
+              "displayName": "Codice ATECO",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Descrizione Attività",
+              "displayName": "Descrizione Attività",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "N° Dipendenti",
+              "displayName": "N° Dipendenti",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Mansioni",
+              "displayName": "Mansioni",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Indirizzo Sede",
+              "displayName": "Indirizzo Sede",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Tipo Documento",
+              "displayName": "Tipo Documento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Categoria Rischio",
+              "displayName": "Categoria Rischio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Pericoli Settore",
+              "displayName": "Pericoli Settore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Rischi per Mansione",
+              "displayName": "Rischi per Mansione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Normativa Riferimento",
+              "displayName": "Normativa Riferimento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Stato",
+              "displayName": "Stato",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Session ID",
+              "displayName": "Session ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Data creazione",
+              "displayName": "Data creazione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -288,
+        -80
+      ],
+      "id": "b536e7a5-66de-4733-973a-b16c47c2773c",
+      "name": "Create a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ctsafe.app.n8n.cloud/webhook/dvr-generation",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"record_id\": \"{{ $json.id }}\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -80,
+        -80
+      ],
+      "id": "fb260c4a-6bdb-40ed-8761-b2cf5cb4d165",
+      "name": "HTTP Request"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "ragione_sociale": "Società Agricola La Cagnolina di Sfondrini",
+          "partita_iva": "07080370963",
+          "codice_ateco": "01.05 – Coltivazioni agricole associate all'allevamento di animali (azienda mista)",
+          "descrizione_attivita": "Allevamento di bovini da latte con produzione di latte, coltivazioni agricole e produzione di biogas",
+          "num_dipendenti": "15",
+          "mansioni": "1. Mungitore / Allevatore bovini da latte (12 addetti); 2. Mungitore / Allevatore bovini da latte + Coltivatore (1 addetto); 3. Impiegato amministrativo (1 addetto); 4. Coltivatore + Addetto impianto biogas (1 addetto)",
+          "indirizzo_sede": "Via Cascina La Cagnolina, 26832 Galgagnano (LO)",
+          "tipo_documento": "DVR nuovo",
+          "categoria_rischio": "ALTO – Settore A (Agricoltura) ai sensi dell'Accordo Stato-Regioni 21/12/2011",
+          "pericoli_settore": "1. Rischio biologico (zoonosi, microrganismi da fermentazione biogas); 2. Movimentazione Manuale dei Carichi (MMC); 3. Movimenti ripetitivi arti superiori (SBAS); 4. Rischio chimico (disinfettanti, fitosanitari, gas da fermentazione H₂S, NH₃, CH₄); 5. Rischio ATEX (atmosfere esplosive – impianto biogas); 6. Rischio meccanico (trattori, macchine agricole, impianto mungitura); 7. Investimento e ribaltamento mezzi agricoli; 8. Rumore (macchine agricole, impianto mungitura, impianto biogas); 9. Vibrazioni HAV e WBV (trattori, attrezzature manuali); 10. Microclima e lavoro all'aperto (caldo/freddo, radiazioni solari UV); 11. Scivolamento e cadute (pavimentazioni bagnate stalla/sala mungitura); 12. Rischio da contatto con animali (calci, schiacciamento, cariche bovini); 13. Rischio elettrico (impianti in ambienti umidi, impianto biogas); 14. Stress lavoro-correlato; 15. Rischio incendio ed emergenze; 16. Rischio VDT (videoterminale – impiegato)",
+          "rischi_per_mansione": "MUNGITORE/ALLEVATORE BOVINI DA LATTE (12+1 addetti): Rischio biologico (zoonosi, contatto deiezioni), contatto con animali (calci, schiacciamento), MMC (mangimi, balle fieno), movimenti ripetitivi arti superiori (mungitura), rischio chimico (detergenti/disinfettanti), scivolamento su superfici bagnate, rumore (impianto mungitura), microclima (stalla), stress lavoro-correlato. | COLTIVATORE (1+1 addetti): Rischio meccanico (trattori, macchine agricole), investimento/ribaltamento mezzi, vibrazioni WBV (trattore) e HAV, rumore (macchine agricole), rischio chimico (fitosanitari), MMC, microclima e radiazioni solari UV, rischio biologico (tetano, punture insetti). | ADDETTO IMPIANTO BIOGAS (1 addetto): Rischio chimico (H₂S, NH₃, CO₂), rischio ATEX (atmosfere esplosive – metano), rischio biologico (microrganismi da fermentazione), rischio elettrico, rumore, rischio incendio/esplosione, MMC, microclima. | IMPIEGATO AMMINISTRATIVO (1 addetto): Rischio VDT (videoterminale), postura sedentaria prolungata, stress lavoro-correlato, microclima ufficio, rischio elettrico.",
+          "normativa_riferimento": "D.Lgs. 81/08 – Titolo I (Disposizioni generali, DVR, obblighi DL); Titolo II (Luoghi di lavoro); Titolo III (Attrezzature di lavoro e DPI); Titolo VI (MMC); Titolo VII (VDT); Titolo VIII (Agenti fisici: rumore, vibrazioni); Titolo IX (Sostanze pericolose – rischio chimico); Titolo X (Agenti biologici); Titolo XI (Atmosfere esplosive – ATEX); Art. 28 c.1-bis (Stress lavoro-correlato); Accordo Stato-Regioni 21/12/2011 (Formazione lavoratori – Rischio ALTO); Accordo Stato-Regioni 22/02/2012 (Abilitazione macchine agricole); D.Lgs. 152/06 (Normativa ambientale – impianto biogas)"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Create a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a record": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "ff9ff5ac-bcbe-4898-a276-48dead5f0ec2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "29d0202a198a2a49fe2d7164f627753643a822e60831ff2b10a67db7fa7c85b4"
+  },
+  "id": "0OG7qRCFr8f2WAlx",
+  "tags": []
+}

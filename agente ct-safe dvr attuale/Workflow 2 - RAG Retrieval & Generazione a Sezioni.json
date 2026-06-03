@@ -1,0 +1,477 @@
+{
+  "name": "Workflow 2 - RAG Retrieval & Generazione a Sezioni",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "dvr-generation",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -464,
+        -32
+      ],
+      "id": "64d2f804-6111-4dd8-bc5e-d0504b306420",
+      "name": "Webhook",
+      "webhookId": "aa85e980-d6a8-4288-9acd-da999d8a5494"
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2GOhTrhaE032us",
+          "mode": "list",
+          "cachedResultName": "Progetti DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl2GOhTrhaE032us"
+        },
+        "id": "={{ $json.body.record_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -224,
+        -32
+      ],
+      "id": "d7fdae1d-de4a-4d1b-95f0-398bb5e20c19",
+      "name": "Get a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "Sei uno specialista di sicurezza sul lavoro ed il tuo ruolo è quello della creazione degli indici di un DVR per il settore che viene dato dall'utente.\nQuello che devi fare è capire il settore in cui opera l'azienda e, sulla base di quello, creare un indice di DVR sulla base di quello che trovi nel supabase vector store.\n\nNon devi creare il DVR, ma semplicemente la struttura dell'indicde.\n\nL'output che devi dare all'utente è il seguente:\n\nParte 1: gli spieghi in 3-4 righe i rischi correlati al suo settore (breve devi essere)\nParte 2: dagli l'indice potenziale del suo DVR"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        256,
+        -32
+      ],
+      "id": "774e7d7c-4f4f-41dc-aac6-e1d98c0835ff",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Chiama questo tool quando devi creare l'indice di un DVR",
+        "tableName": {
+          "__rl": true,
+          "value": "indice",
+          "mode": "list",
+          "cachedResultName": "indice"
+        },
+        "topK": 5,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        432,
+        176
+      ],
+      "id": "3c39e49c-575e-4bee-8129-555473560d76",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "0c9apSi4lSWdKlXn",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.6",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        192,
+        192
+      ],
+      "id": "51e883aa-c44c-4956-bd01-5791d8ac8c68",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "zlIuWnJuYLdl5SpG",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        496,
+        336
+      ],
+      "id": "6469d6ce-6e8b-4404-9dfc-db07bc7574f0",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "hxszZp80eTex4fHO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.first().json;\nconst query = `Restituisci l'indice completo per un DVR di un'azienda con: settore ATECO ${r['Codice ATECO']}, descrizione attività: ${r['Descrizione Attività']}, categoria rischio: ${r['Categoria Rischio']}, pericoli settore: ${r['Pericoli Settore']}`;\nreturn [{ json: { query } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        -32
+      ],
+      "id": "65eb120a-4b9d-4d40-a973-3f3f3ea15ba2",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2GOhTrhaE032us",
+          "mode": "list",
+          "cachedResultName": "Progetti DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl2GOhTrhaE032us"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Webhook').item.json.body.record_id }}",
+            "INDICE DVR": "={{ $json.output }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ragione Sociale",
+              "displayName": "Ragione Sociale",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Partita IVA",
+              "displayName": "Partita IVA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Codice ATECO",
+              "displayName": "Codice ATECO",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Descrizione Attività",
+              "displayName": "Descrizione Attività",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "N° Dipendenti",
+              "displayName": "N° Dipendenti",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mansioni",
+              "displayName": "Mansioni",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Indirizzo Sede",
+              "displayName": "Indirizzo Sede",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo Documento",
+              "displayName": "Tipo Documento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Categoria Rischio",
+              "displayName": "Categoria Rischio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Pericoli Settore",
+              "displayName": "Pericoli Settore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Rischi per Mansione",
+              "displayName": "Rischi per Mansione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Normativa Riferimento",
+              "displayName": "Normativa Riferimento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Stato",
+              "displayName": "Stato",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Session ID",
+              "displayName": "Session ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Data creazione",
+              "displayName": "Data creazione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "INDICE DVR",
+              "displayName": "INDICE DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        -32
+      ],
+      "id": "1c52bbaa-e33e-4691-a2fe-305afcf408ed",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a record": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bd2d223d-b726-4ec2-b590-bc876eebe46c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "29d0202a198a2a49fe2d7164f627753643a822e60831ff2b10a67db7fa7c85b4"
+  },
+  "id": "vWjbozKfvzHYANIF",
+  "tags": []
+}

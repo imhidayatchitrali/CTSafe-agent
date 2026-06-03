@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: ctsafe-dvr-agent
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DVR_ENV
+        value: production
+      - key: DVR_APP_NAME
+        value: "CT Safe DVR Agent"
+      - key: APP_BASE_URL
+        value: https://your-render-app.onrender.com
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: TELEGRAM_BOT_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: OPENROUTER_BASE_URL
+        value: https://openrouter.ai/api/v1
+      - key: OPENROUTER_APP_TITLE
+        value: "CT Safe DVR Agent"
+      - key: DVR_EMBEDDING_PROVIDER
+        value: openai_api
+      - key: DVR_EMBEDDING_MODEL
+        value: text-embedding-3-small
+      - key: OPENAI_SUBSCRIPTION_BRIDGE_ENABLED
+        value: "true"
+      - key: OPENAI_SUBSCRIPTION_BRIDGE_HEALTHCHECK_REQUIRED
+        value: "true"
+      - key: OPENAI_SUBSCRIPTION_BRIDGE_URL
+        sync: false
+      - key: OPENAI_SUBSCRIPTION_BRIDGE_SESSION_REF
+        sync: false
+      - key: AIRTABLE_API_KEY
+        sync: false
+      - key: AIRTABLE_BASE_ID
+        sync: false
+      - key: DVR_REPOSITORY_BACKEND
+        value: memory
+      - key: DVR_RAG_BACKEND
+        value: mock
+      - key: DVR_OUTPUT_DIR
+        value: generated_documents
+      - key: DVR_TEMPLATE_PATH
+        value: "esempi dvr per template/01_DVR-spheractsafe (1).docx"
+      - key: DVR_ALLOWED_OPERATOR_IDS
+        value: "local-client,local-reviewer,local-admin"
+      - key: DVR_DEFAULT_LLM_PROVIDER
+        value: local_mock
+      - key: DVR_DEFAULT_MODEL
+        value: mock-deterministic-v1
+      - key: DVR_ENABLE_AGENTOS
+        value: "false"

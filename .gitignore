@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+file.env
+*.local
+.mcp.json
+.mcp*.json
+.claude/
+__pycache__/
+*.py[cod]
+.tmp/
+generated_documents/
+_handoff_clean/

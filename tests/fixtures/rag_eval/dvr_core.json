@@ -1,0 +1,24 @@
+[
+  {
+    "name": "normativa_dpi_mansione",
+    "query": "DPI per mansione tecnico installatore rischio elettrico D.Lgs. 81/08",
+    "corpus": "normativa",
+    "filters": {
+      "source_type": "normativa"
+    },
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["Dispositivi di Protezione Individuale", "rischi", "mansione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_struttura_dvr",
+    "query": "indice DVR struttura capitoli valutazione rischi DPI sorveglianza sanitaria",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["DPI", "Sorveglianza Sanitaria", "rischi"],
+    "must_include_source_terms": []
+  }
+]

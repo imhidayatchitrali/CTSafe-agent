@@ -1,0 +1,335 @@
+{
+  "name": "Workflow 1 - Intake & Classificazione",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=Sei un consulente esperto in sicurezza sul lavoro italiano (D.Lgs 81/08) e lavori per C.T. SAFE SRL. Il tuo compito è raccogliere e classificare i dati di un nuovo progetto DVR.\n\n## COMPITO\n1. Estrai dal messaggio dell'utente i seguenti dati:\n   - Ragione sociale\n   - Partita IVA\n   - Codice ATECO\n   - Descrizione attività\n   - Numero dipendenti\n   - Mansioni principali\n   - Indirizzo sede operativa\n   - Tipo documento (DVR nuovo / Aggiornamento)\n\n2. Se mancano dati obbligatori, CHIEDI all'utente prima di procedere. Non inventare mai dati mancanti e non chiedere mai dei documenti, ma solo risposte che l'utente manda via messaggio.\n\n3. Una volta che hai tutti i dati, esegui la classificazione:\n   - Categoria di rischio: Basso / Medio / Alto (basandoti su codice ATECO e attività)\n   - Lista pericoli specifici del settore (es. caduta dall'alto, rischio chimico, MMC, rumore, vibrazioni, ecc.)\n   - Rischi per mansione: associa ogni mansione ai pericoli rilevanti\n   - Normativa di riferimento principale per il settore\n\n4. Se l'utente allega un file (es. visura, DVR precedente), analizzane il contenuto per estrarre dati utili.\n\n## OUTPUT FINALE\nQuando hai tutti i dati e la classificazione è completa, rispondi all'utente con un riepilogo chiaro e chiedi conferma. Poi chiama il tool \"salva_progetto\" con tutti i dati strutturati.\n\n## REGOLE\n- Rispondi sempre in italiano\n- Sii preciso sui riferimenti normativi (Titoli specifici del D.Lgs 81/08)\n- Non procedere mai con dati incompleti\n- Se il codice ATECO non è fornito, deducilo dall'attività descritta e chiedi conferma\n\n## OUTPUT FINALE\nQuando hai tutti i dati e la classificazione è completa, rispondi all'utente con un riepilogo chiaro e chiedi conferma. Poi chiama il tool \"salva_progetto\" con tutti i dati strutturati."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -176,
+        -160
+      ],
+      "id": "eda634e5-15c1-46ed-831a-523e9353dc52",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.6",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -352,
+        48
+      ],
+      "id": "f5e437be-09a9-405e-b010-72d33ef7fc26",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "zlIuWnJuYLdl5SpG",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.from.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -160,
+        48
+      ],
+      "id": "71cce6a5-6c8f-4353-95b9-5031c871a823",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "description": "Chiama questo tool SOLO quando:\n1. Hai raccolto TUTTI i dati obbligatori del cliente (ragione sociale, partita IVA, codice ATECO, descrizione attività, numero dipendenti, mansioni, indirizzo sede, tipo documento)\n2. Hai completato la classificazione (categoria rischio, pericoli settore, rischi per mansione, normativa di riferimento)\n3. Hai presentato il riepilogo completo all'utente\n4. L'utente ha ESPLICITAMENTE confermato che i dati sono corretti\n\nNON chiamare questo tool se mancano dati o se l'utente non ha ancora confermato. Questo tool salva il progetto nel database e avvia automaticamente la generazione del DVR.",
+        "workflowId": {
+          "__rl": true,
+          "value": "0OG7qRCFr8f2WAlx",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/0OG7qRCFr8f2WAlx",
+          "cachedResultName": "avvia_generazione"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ragione_sociale": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ragione_sociale', ``, 'string') }}",
+            "partita_iva": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('partita_iva', ``, 'string') }}",
+            "codice_ateco": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('codice_ateco', ``, 'string') }}",
+            "descrizione_attivita": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('descrizione_attivita', ``, 'string') }}",
+            "num_dipendenti": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('num_dipendenti', ``, 'string') }}",
+            "normativa_riferimento": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('normativa_riferimento', ``, 'string') }}",
+            "rischi_per_mansione": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('rischi_per_mansione', ``, 'string') }}",
+            "pericoli_settore": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('pericoli_settore', ``, 'string') }}",
+            "categoria_rischio": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('categoria_rischio', ``, 'string') }}",
+            "tipo_documento": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('tipo_documento', ``, 'string') }}",
+            "indirizzo_sede": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('indirizzo_sede', ``, 'string') }}",
+            "mansioni": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('mansioni', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ragione_sociale",
+              "displayName": "ragione_sociale",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "partita_iva",
+              "displayName": "partita_iva",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "codice_ateco",
+              "displayName": "codice_ateco",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "descrizione_attivita",
+              "displayName": "descrizione_attivita",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "num_dipendenti",
+              "displayName": "num_dipendenti",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "mansioni",
+              "displayName": "mansioni",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "indirizzo_sede",
+              "displayName": "indirizzo_sede",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "tipo_documento",
+              "displayName": "tipo_documento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "categoria_rischio",
+              "displayName": "categoria_rischio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "pericoli_settore",
+              "displayName": "pericoli_settore",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "rischi_per_mansione",
+              "displayName": "rischi_per_mansione",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "normativa_riferimento",
+              "displayName": "normativa_riferimento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        64,
+        48
+      ],
+      "id": "060f880b-e249-4435-a9d4-805a1069cd41",
+      "name": "Call 'avvia_generazione'"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        -160
+      ],
+      "id": "79fd2b55-f858-4bc2-bf3e-cde2210d46ee",
+      "name": "Telegram Trigger",
+      "webhookId": "287bb215-cb12-41e7-9566-30a6207a7e4a",
+      "credentials": {
+        "telegramApi": {
+          "id": "5e1sStk8qNhaG9Um",
+          "name": "Telegram account 5"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        176,
+        -160
+      ],
+      "id": "02e40646-4c5a-4f76-93f2-9a0fd198293c",
+      "name": "Send a text message",
+      "webhookId": "31caa5bc-fb59-48de-8733-8e466ba364f4",
+      "credentials": {
+        "telegramApi": {
+          "id": "5e1sStk8qNhaG9Um",
+          "name": "Telegram account 5"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'avvia_generazione'": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "931e1477-5b41-4878-a910-67b4c8664abd",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "29d0202a198a2a49fe2d7164f627753643a822e60831ff2b10a67db7fa7c85b4"
+  },
+  "id": "cjCttGzZwm9IDid1",
+  "tags": []
+}

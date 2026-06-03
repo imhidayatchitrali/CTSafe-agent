@@ -1,0 +1,3 @@
+display_name: CT Safe DVR Domain
+short_description: Domain rules for CT Safe DVR generation, RAG, QA, DOCX, and Agno agents.
+default_prompt: Use CT Safe DVR domain rules to generate, validate, or debug a grounded DVR workflow or document.

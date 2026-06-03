@@ -1,0 +1,916 @@
+{
+  "name": "Workflow 4 - Redattore",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "d66d0b8d-4591-4beb-b418-379401bf079e",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "77955d3c-907f-4773-aa22-51b87aeecbb0",
+      "name": "Webhook",
+      "webhookId": "d66d0b8d-4591-4beb-b418-379401bf079e"
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2GOhTrhaE032us",
+          "mode": "list",
+          "cachedResultName": "Progetti DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl2GOhTrhaE032us"
+        },
+        "id": "={{ $json.query.record_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "e4609981-4a1b-4fa0-8b42-c098bc3ecb3d",
+      "name": "Get a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0zmvKGN4ms5ApU",
+          "mode": "list",
+          "cachedResultName": "Capitoli DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl0zmvKGN4ms5ApU"
+        },
+        "filterByFormula": "=AND(Stato = \"Da redigere\", SEARCH(\"{{ $('Get a record').item.json.id }}\", {Progetto DVR}) > 0)",
+        "options": {},
+        "sort": {
+          "property": [
+            {
+              "field": "Ordine"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "ba8f53ea-d1b3-417a-98da-e371c812f754",
+      "name": "Search records",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d44d71b4-da67-4c26-a41d-0e533a87cce4",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "model": "anthropic/claude-opus-4.6",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        976,
+        304
+      ],
+      "id": "5c0aa86b-b384-4e3f-b0c8-7d5be0eff95f",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "zlIuWnJuYLdl5SpG",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Cerca nella normativa italiana sulla sicurezza sul lavoro (D.Lgs. 81/08, Accordi Stato-Regioni, norme tecniche). Usa questo strumento per trovare i riferimenti normativi specifici (articoli, commi, allegati) necessari per redigere il capitolo del DVR. Fai MASSIMO 2 ricerche per capitolo.",
+        "tableName": {
+          "__rl": true,
+          "value": "normativa",
+          "mode": "list",
+          "cachedResultName": "normativa"
+        },
+        "topK": 6,
+        "options": {
+          "queryName": "match_normativa"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1184,
+        368
+      ],
+      "id": "c3d8cf67-5830-484f-b928-ed32c3418850",
+      "name": "NORMATIVE",
+      "credentials": {
+        "supabaseApi": {
+          "id": "0c9apSi4lSWdKlXn",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1152,
+        528
+      ],
+      "id": "2e08c095-9299-4a79-9b1a-1bd12f995b31",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "hxszZp80eTex4fHO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0zmvKGN4ms5ApU",
+          "mode": "list",
+          "cachedResultName": "Capitoli DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl0zmvKGN4ms5ApU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Update record').item.json.id }}",
+            "Stato": "Completato",
+            "Contenuto Generato": "={{ $json.output }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Progetto DVR",
+              "displayName": "Progetto DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero Capitolo",
+              "displayName": "Numero Capitolo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Titolo Capitolo",
+              "displayName": "Titolo Capitolo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Brief",
+              "displayName": "Brief",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Stato",
+              "displayName": "Stato",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Da redigere",
+                  "value": "Da redigere"
+                },
+                {
+                  "name": "In corso",
+                  "value": "In corso"
+                },
+                {
+                  "name": "Completato",
+                  "value": "Completato"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Ordine",
+              "displayName": "Ordine",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Contenuto Generato",
+              "displayName": "Contenuto Generato",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1408,
+        128
+      ],
+      "id": "00f1dfd7-fd4b-4805-be43-d9b9aa90fe18",
+      "name": "Update record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sei un redattore tecnico esperto in sicurezza sul lavoro, specializzato nella stesura di Documenti di Valutazione dei Rischi (DVR) conformi al D.Lgs. 81/08 e s.m.i.\n\n## IL TUO COMPITO\n\nDevi redigere UN SINGOLO CAPITOLO del DVR basandoti sul brief che ricevi. Il testo deve essere professionale, tecnico, completo e pronto per essere inserito nel documento finale.\n\n## DATI AZIENDA\n\n- Ragione Sociale: {{ $('Get a record').item.json['Ragione Sociale'] }}\n- Codice ATECO: {{ $('Get a record').item.json['Codice ATECO'] }}\n- Descrizione Attività: {{ $('Get a record').item.json['Descrizione Attività'] }}\n- N° Dipendenti: {{ $('Get a record').item.json['N° Dipendenti'] }}\n- Mansioni: {{ $('Get a record').item.json['Mansioni'] }}\n- Indirizzo Sede: {{ $('Get a record').item.json['Indirizzo Sede'] }}\n- Categoria Rischio: {{ $('Get a record').item.json['Categoria Rischio'] }}\n- Pericoli Settore: {{ $('Get a record').item.json['Pericoli Settore'] }}\n- Rischi per Mansione: {{ $('Get a record').item.json['Rischi per Mansione'] }}\n\n## BRIEF DEL CAPITOLO DA REDIGERE\n\n{{ $json.fields.Brief }}\n\n## REGOLE DI REDAZIONE\n\n1. SCRIVI SOLO il contenuto del capitolo, senza preamboli o commenti\n2. Usa un linguaggio tecnico-professionale appropriato per un DVR\n3. Personalizza TUTTO con i dati specifici dell'azienda — mai testo generico\n4. Includi i riferimenti normativi specifici (Articoli, commi, allegati del D.Lgs. 81/08)\n5. Se il brief richiede tabelle, creale in formato Markdown\n6. Se il brief indica mansioni specifiche, dettaglia i rischi PER OGNI mansione\n7. Per le valutazioni dei rischi, chiama il tool per le normative e usa questo strumento per trovare i riferimenti normativi specifici per il calcolo (articoli, commi, allegati) necessari per redigere il capitolo del DVR. Fai MASSIMO 2 ricerche per capitolo.\n8. Specifica sempre: pericolo identificato, mansioni esposte, livello di rischio, misure di prevenzione, DPI necessari\n9. La lunghezza deve rispettare il target indicato nel brief\n10. Se hai accesso al tool di ricerca normativa, USALO per verificare i riferimenti specifici\n\n## FORMATO OUTPUT\n\nScrivi direttamente il testo del capitolo in Markdown, partendo dal titolo con ## seguito dal numero e titolo del capitolo.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1056,
+        128
+      ],
+      "id": "da949202-692f-45bb-ba79-9db16f7f97dd",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0zmvKGN4ms5ApU",
+          "mode": "list",
+          "cachedResultName": "Capitoli DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl0zmvKGN4ms5ApU"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Stato": "In corso",
+            "id": "={{ $('Search records').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Progetto DVR",
+              "displayName": "Progetto DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Numero Capitolo",
+              "displayName": "Numero Capitolo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Titolo Capitolo",
+              "displayName": "Titolo Capitolo",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Brief",
+              "displayName": "Brief",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Stato",
+              "displayName": "Stato",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Da redigere",
+                  "value": "Da redigere"
+                },
+                {
+                  "name": "In corso",
+                  "value": "In corso"
+                },
+                {
+                  "name": "Completato",
+                  "value": "Completato"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Ordine",
+              "displayName": "Ordine",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        128
+      ],
+      "id": "119ceca9-daac-46c2-b6cf-fef9fe41b211",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "appHgc23s1sdCdrWv",
+          "mode": "list",
+          "cachedResultName": "DOCUMENTI CT SAFE",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl2GOhTrhaE032us",
+          "mode": "list",
+          "cachedResultName": "Progetti DVR",
+          "cachedResultUrl": "https://airtable.com/appHgc23s1sdCdrWv/tbl2GOhTrhaE032us"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Stato DVR": "Redazione fatta - crea documento"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Ragione Sociale",
+              "displayName": "Ragione Sociale",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Partita IVA",
+              "displayName": "Partita IVA",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Codice ATECO",
+              "displayName": "Codice ATECO",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Descrizione Attività",
+              "displayName": "Descrizione Attività",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "N° Dipendenti",
+              "displayName": "N° Dipendenti",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Mansioni",
+              "displayName": "Mansioni",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Indirizzo Sede",
+              "displayName": "Indirizzo Sede",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Tipo Documento",
+              "displayName": "Tipo Documento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Categoria Rischio",
+              "displayName": "Categoria Rischio",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Pericoli Settore",
+              "displayName": "Pericoli Settore",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Rischi per Mansione",
+              "displayName": "Rischi per Mansione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Normativa Riferimento",
+              "displayName": "Normativa Riferimento",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Data creazione",
+              "displayName": "Data creazione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "INDICE DVR",
+              "displayName": "INDICE DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "VALIDA INDICE",
+              "displayName": "VALIDA INDICE",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "INDICE DVR VALIDATO",
+              "displayName": "INDICE DVR VALIDATO",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "REDIGI DVR",
+              "displayName": "REDIGI DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Stato DVR",
+              "displayName": "Stato DVR",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "In validazione",
+                  "value": "In validazione"
+                },
+                {
+                  "name": "Indice validato",
+                  "value": "Indice validato"
+                },
+                {
+                  "name": "In redazione",
+                  "value": "In redazione"
+                },
+                {
+                  "name": "Redazione fatta - crea documento",
+                  "value": "Redazione fatta - crea documento"
+                },
+                {
+                  "name": "DVR Creato",
+                  "value": "DVR Creato"
+                },
+                {
+                  "name": "Errore",
+                  "value": "Errore"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Link DVR Google Drive",
+              "displayName": "Link DVR Google Drive",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Log Validazione",
+              "displayName": "Log Validazione",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        880,
+        -160
+      ],
+      "id": "90912a19-627f-4ce9-9cac-f3d2cba17a57",
+      "name": "Update record2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "aZ4lviuwocSbPrNV",
+          "name": "Airtable Personal Access Token account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Get a record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a record": {
+      "main": [
+        [
+          {
+            "node": "Search records",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Update record2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NORMATIVE": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "NORMATIVE",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update record1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update record": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3db31c5e-7614-4872-b823-fb4dae2c5ca8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "29d0202a198a2a49fe2d7164f627753643a822e60831ff2b10a67db7fa7c85b4"
+  },
+  "id": "LmV5Twcn35TjoXaQ",
+  "tags": []
+}

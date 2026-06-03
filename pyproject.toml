@@ -1,0 +1,16 @@
+[project]
+name = "ctsafe-dvr-agent"
+version = "0.1.0"
+description = "Thin slice backend for the CT Safe DVR Agent."
+requires-python = ">=3.11"
+dependencies = [
+  "agno",
+  "fastapi",
+  "pydantic",
+  "python-docx",
+  "uvicorn",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

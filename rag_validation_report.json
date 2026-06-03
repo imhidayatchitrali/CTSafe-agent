@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-05-31T09:20:13.190282+00:00",
+  "backend": "mock",
+  "validations": [
+    {
+      "backend": "mock",
+      "status": "pass",
+      "passed": 2,
+      "total": 2,
+      "tests": [
+        {
+          "name": "Index structure",
+          "query": "indice DVR struttura capitoli valutazione rischi",
+          "evidence_count": 1,
+          "is_mock": true,
+          "passed": true
+        },
+        {
+          "name": "Normative references",
+          "query": "DPI D.Lgs 81/08 dispositivi protezione",
+          "evidence_count": 2,
+          "is_mock": true,
+          "passed": true
+        }
+      ]
+    },
+    {
+      "validator": "metadata",
+      "status": "partial",
+      "passed": 1,
+      "total": 3,
+      "tests": [
+        {
+          "name": "Valid normative chunk",
+          "passed": true,
+          "is_compliant": true,
+          "score": 0.95,
+          "issues": 1
+        },
+        {
+          "name": "Missing source_document",
+          "passed": false,
+          "is_compliant": true,
+          "score": 0.9,
+          "issues": 2
+        },
+        {
+          "name": "Invalid source_type",
+          "passed": false,
+          "is_compliant": true,
+          "score": 0.9,
+          "issues": 2
+        }
+      ]
+    },
+    {
+      "validator": "regulatory_refs",
+      "status": "pass",
+      "passed": 3,
+      "total": 3,
+      "tests": [
+        {
+          "name": "D.Lgs 81/08 cited",
+          "passed": true,
+          "is_compliant": true,
+          "score": 1.0,
+          "missing_refs": 8
+        },
+        {
+          "name": "Missing normative refs",
+          "passed": true,
+          "is_compliant": false,
+          "score": 0.0,
+          "missing_refs": 9
+        },
+        {
+          "name": "Chemical risk specific refs",
+          "passed": true,
+          "is_compliant": true,
+          "score": 1.0,
+          "missing_refs": 7
+        }
+      ]
+    },
+    {
+      "validator": "compliance_scorer",
+      "status": "pass",
+      "passed": 2,
+      "total": 2,
+      "tests": [
+        {
+          "name": "High quality evidence",
+          "passed": true,
+          "is_compliant": true,
+          "score": 0.9600000000000001,
+          "min_expected": 0.6
+        },
+        {
+          "name": "Poor quality evidence",
+          "passed": true,
+          "is_compliant": false,
+          "score": 0.43000000000000005,
+          "min_expected": 0.0
+        }
+      ]
+    }
+  ]
+}

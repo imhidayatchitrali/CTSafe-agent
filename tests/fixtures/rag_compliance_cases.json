@@ -1,0 +1,270 @@
+[
+  {
+    "name": "normativa_core_dlgs_81_08",
+    "description": "Core normative requirement: D.Lgs 81/08 must be present",
+    "query": "Decreto Legislativo 81 2008 D.Lgs 81/08 worker safety health protection",
+    "corpus": "normativa",
+    "filters": {
+      "source_type": "normativa"
+    },
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["D.Lgs 81/08", "worker", "safety", "protection"],
+    "must_include_source_terms": ["D.Lgs 81/08"]
+  },
+  {
+    "name": "normativa_dpi_requirements",
+    "description": "DPI (Personal Protective Equipment) requirements with normative backing",
+    "query": "Dispositivi di Protezione Individuale DPI Allegato VII protezione rischi",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["DPI", "Dispositivi", "Protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_chemical_risks",
+    "description": "Chemical hazard requirements under Allegato XIII",
+    "query": "Allegato XIII sostanze cancerogene mutagene protezione chimica",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["Allegato XIII", "chimiche", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_biological_hazards",
+    "description": "Biological hazard assessment requirements",
+    "query": "rischi biologici microorganismi agenti biologici protezione",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["biologici", "microorganismi", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_noise_exposure",
+    "description": "Noise exposure limits and DPI requirements",
+    "query": "rumore esposizione decibel dB limite dpi protezione uditiva",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["rumore", "dB", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_medical_surveillance",
+    "description": "Medical surveillance requirements under Allegato VIII",
+    "query": "Allegato VIII sorveglianza medica sanitaria visita visite periodiche",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["sorveglianza", "medica", "sanitaria"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_asbestos_protection",
+    "description": "Asbestos handling and protection requirements",
+    "query": "Allegato XII amianto fibre protezione esposizione controllo",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["amianto", "fibre", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_vibration_risks",
+    "description": "Vibration exposure assessment requirements",
+    "query": "vibrazioni esposizione limite protezione rischi meccanici",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["vibrazioni", "esposizione", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_risk_assessment",
+    "description": "Risk assessment methodology and requirements",
+    "query": "valutazione dei rischi metodologia analisi processo DVR",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["valutazione", "rischi", "DVR"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "normativa_training_requirements",
+    "description": "Safety training and information requirements",
+    "query": "formazione addestramento informazione sicurezza lavoratori",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["formazione", "addestramento", "sicurezza"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_dvr_structure",
+    "description": "Standard DVR document structure and required sections",
+    "query": "indice DVR struttura capitoli sezioni valutazione rischi DPI",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["DVR", "indice", "sezioni"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_dpi_section",
+    "description": "DPI section requirements in DVR template",
+    "query": "DPI dispositivi protezione individuali mansioni ambienti",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["DPI", "dispositivi", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_risk_chapter",
+    "description": "Risk identification and analysis chapter structure",
+    "query": "rischi identificazione analisi pericoli ambienti lavorativi",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["rischi", "identificazione", "analisi"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_hazard_matrix",
+    "description": "Hazard/risk matrix and classification requirements",
+    "query": "matrice rischi probabilità gravità valutazione severità",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["matrice", "rischi", "valutazione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_preventive_measures",
+    "description": "Preventive and protective measures documentation",
+    "query": "misure prevenzione protezione interventi miglioramento",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["misure", "prevenzione", "protezione"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "indice_roles_responsibilities",
+    "description": "Roles, responsibilities and RSPP requirements",
+    "query": "RSPP responsabile dirigente preposto obblighi compiti",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["RSPP", "responsabile", "compiti"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "technical_operator_electrical",
+    "description": "Electrical technician specific DPI and hazards",
+    "query": "tecnico elettrico rischio elettrico guanti isolanti scarpe",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["elettrico", "guanti", "isolanti"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "warehouse_operator_baseline",
+    "description": "Warehouse operator baseline DPI requirements",
+    "query": "operatore magazzino DPI scarpe casco guanti basilari",
+    "corpus": "indice",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["magazzino", "DPI", "scarpe"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "laboratory_personnel_biological",
+    "description": "Laboratory worker protection from biological hazards",
+    "query": "laboratorio biologico mascherina FFP2 camice guanti",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["laboratorio", "biologico", "mascherina"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "compliance_check_small_company",
+    "description": "Compliance requirements for small company (<15 employees)",
+    "query": "piccola azienda impresa famigliare dipendenti obblighi DVR",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["piccola", "azienda", "dipendenti"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "compliance_check_large_company",
+    "description": "Compliance requirements for large company (>50 employees)",
+    "query": "grande azienda 50 dipendenti comitato RLS sindacale",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 1,
+    "must_include_terms": ["grande", "50", "azienda"],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "edge_case_ateco_specific",
+    "description": "ATECO-specific requirements for manufacturing",
+    "query": "ATECO 28 fabbricazione macchinari metallo rischi specifici",
+    "corpus": "normativa",
+    "filters": {
+      "ateco_codes": ["28"]
+    },
+    "top_k": 5,
+    "min_results": 0,
+    "must_include_terms": [],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "edge_case_empty_result",
+    "description": "Query with no expected results (fallback test)",
+    "query": "XYZABC12345 nonexistent_regulatory_term fake_reference",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 0,
+    "must_include_terms": [],
+    "must_include_source_terms": []
+  },
+  {
+    "name": "edge_case_unicode_content",
+    "description": "Query with Italian special characters",
+    "query": "disposizioni protezione esposizione inquinanti polveri fibre amianto",
+    "corpus": "normativa",
+    "filters": {},
+    "top_k": 5,
+    "min_results": 0,
+    "must_include_terms": [],
+    "must_include_source_terms": []
+  }
+]

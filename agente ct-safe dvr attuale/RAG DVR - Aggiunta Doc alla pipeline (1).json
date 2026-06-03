@@ -1,0 +1,370 @@
+{
+  "name": "RAG DVR - Aggiunta Doc alla pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "normativa",
+          "mode": "list",
+          "cachedResultName": "normativa"
+        },
+        "options": {
+          "queryName": "match_normativa"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        1296,
+        96
+      ],
+      "id": "8099ec76-acea-4fb5-9969-e10c59460752",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "0c9apSi4lSWdKlXn",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.pages.map(p => p.markdown).join('\\n\\n') }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        1520,
+        336
+      ],
+      "id": "ebb9d205-e306-4a2b-8ccf-be7a2ff95038",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1296,
+        336
+      ],
+      "id": "fc43d4fd-3659-4acd-8b6d-8a9a5b50834e",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "hxszZp80eTex4fHO",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        528,
+        80
+      ],
+      "id": "5bce463f-2e37-4291-a5ef-aa1148606160",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FhHcqqKwyZR8Q32k",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -192,
+        64
+      ],
+      "id": "03273936-a3c3-44dd-aa0f-743a1384c348",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "returnAll": true,
+        "filter": {
+          "folderId": {
+            "__rl": true,
+            "value": "1ppjQVP1ev2A0xb9SG2KxCY3eLZcdjkF0",
+            "mode": "list",
+            "cachedResultName": "NORMATIVE DA VETTORIALIZZARE",
+            "cachedResultUrl": "https://drive.google.com/drive/folders/1ppjQVP1ev2A0xb9SG2KxCY3eLZcdjkF0"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        32,
+        64
+      ],
+      "id": "3f7fa5eb-a5a5-48b2-8571-7553f718ec00",
+      "name": "Search files and folders",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FhHcqqKwyZR8Q32k",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        288,
+        64
+      ],
+      "id": "f6025789-137c-47fb-819a-7f2149adedcd",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.mistral.ai/v1/ocr",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"mistral-ocr-latest\",\n  \"document\": {\n    \"type\": \"document_url\",\n    \"document_url\": \"data:application/pdf;base64,{{ $json.base64Content }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        992,
+        96
+      ],
+      "id": "5bf33bf6-f74a-4957-b726-59fc81ffa348",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "JY913kudtpONOeQd",
+          "name": "Header Auth account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst results = [];\n\nfor (const item of items) {\n  const binaryData = await this.helpers.getBinaryDataBuffer(item.json.$index || 0, 'data');\n  const base64 = binaryData.toString('base64');\n  \n  results.push({\n    json: {\n      base64Content: base64,\n      fileName: item.binary.data.fileName\n    }\n  });\n}\n\nreturn results;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        720,
+        96
+      ],
+      "id": "bbb58ed5-0521-4015-b7cf-7ba5fae19904",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "move",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Search files and folders').item.json.id }}",
+          "mode": "id"
+        },
+        "driveId": {
+          "__rl": true,
+          "value": "My Drive",
+          "mode": "list",
+          "cachedResultName": "My Drive",
+          "cachedResultUrl": "https://drive.google.com/drive/my-drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1RZ2KErxUFVp2IVXY55o_aJxqEkmXQPFM",
+          "mode": "list",
+          "cachedResultName": "FATTI",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1RZ2KErxUFVp2IVXY55o_aJxqEkmXQPFM"
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        2064,
+        96
+      ],
+      "id": "46010ab6-c301-422f-8110-708e45105f90",
+      "name": "Move file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "FhHcqqKwyZR8Q32k",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        96
+      ],
+      "id": "c019176f-4d6a-49ba-a54b-a5bf36025a41",
+      "name": "Limit"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Search files and folders",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search files and folders": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Move file": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Move file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "71ef6485-7a24-483f-b159-16b72b706ffa",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "29d0202a198a2a49fe2d7164f627753643a822e60831ff2b10a67db7fa7c85b4"
+  },
+  "id": "hwew54wJmjnN6O2X",
+  "tags": []
+}

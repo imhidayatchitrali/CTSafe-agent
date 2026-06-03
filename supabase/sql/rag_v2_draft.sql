@@ -1,0 +1,7 @@
+-- CT Safe DVR Agent - RAG v2 SQL draft pointer.
+--
+-- The executable RAG v2 schema is now tracked as:
+-- supabase/migrations/202605290001_rag_v2_chunks.sql
+--
+-- Keep this file only as a stable reference for older notes that mention the
+-- previous draft path.
