@@ -43,9 +43,9 @@ services:
       - key: AIRTABLE_BASE_ID
         sync: false
       - key: DVR_REPOSITORY_BACKEND
-        value: memory
+        value: supabase
       - key: DVR_RAG_BACKEND
-        value: mock
+        value: supabase
       - key: DVR_OUTPUT_DIR
         value: generated_documents
       - key: DVR_TEMPLATE_PATH
