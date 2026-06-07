@@ -90,7 +90,13 @@ class CtsafeDvrAgnoWorkflow(_get_agno_workflow_base()):
             debug_mode=settings.environment == "local",
             telemetry=False,
         )
-        super().__init__(**workflow_kwargs)
+        try:
+            super().__init__(**workflow_kwargs)
+        except TypeError as exc:
+            logger.warning(
+                "agno.workflow_base_init_failed",
+                extra={"error": str(exc), "workflow_kwargs": workflow_kwargs},
+            )
 
     def __deepcopy__(self, memo: dict[int, Any]) -> "CtsafeDvrAgnoWorkflow":
         copied = type(self)(
